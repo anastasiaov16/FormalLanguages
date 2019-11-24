@@ -12,17 +12,16 @@ namespace Automation1
         Dictionary<string, Dictionary<string, string>> Transition = new Dictionary<string, Dictionary<string, string>>();
         public string[] State;
         public string[] Alph;
-        public string [] Start;
-        public string [] Stop;
-        
+        public List<string> Stop;
+        public List<string> Start;
         public string[] line = File.ReadAllLines("Automate.txt");
 
         public Automate()
         {
             State = line[0].Split(',');
             Alph = line[1].Split(',');
-            Start = line[line.Length - 2].Split(',');
-            Stop = line[line.Length - 1].Split(',');
+            Start = line[line.Length - 2].Split(',').ToList();
+            Stop = line[line.Length - 1].Split(',').ToList();
 
             for (var i = 2; i < line.Length - 2; i++)
             {
@@ -49,37 +48,26 @@ namespace Automation1
             bool flag = false;
             int maxLength = 0;
             int idx = startIndex;
-            string currentStates = String.Join("", Start);
-            
+            string currentStates = String.Join(" ", Start);
+
+
             if (Stop.Contains(currentStates.ToString()))
             {
                 flag = true;
             }
 
+
             for (int i = idx; i < text.Length; i++)
             {
-                if (Alph.Contains(text[i].ToString()) && currentStates!= " ")
+                if (Alph.Contains(text[i].ToString()) && currentStates != " ")
                 {
-                    foreach (var item in Transition)
-                    {
-                        if (item.Key == text[i].ToString())
-                        {
-                            foreach (var item1 in item.Value)
-                            {
-                                if(item1.Key == currentStates)
-                                {
-                                    currentStates=item1.Value;
-                                    goto Check;
-                                }
-                            }
-                        }
-                    }
-                    Check: if (Stop.Contains(currentStates.ToString()))
+                    currentStates = Transition[text[i].ToString()][currentStates].ToString();
+                    if (Stop.Contains(currentStates.ToString()))
                     {
                         flag = true;
                         maxLength = i + 1 - idx;
-
                     }
+
                 }
                 else
                 {

@@ -14,7 +14,7 @@ namespace Automation1
             List<string> result = new List<string>();
             StreamReader f = new StreamReader("input.txt", Encoding.Default);
             string str = f.ReadToEnd();
-            Automate auto = new Automate(); 
+            Automate auto = new Automate();
             int k = 0;
             while (k < str.Length)
             {
